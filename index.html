@@ -124,6 +124,32 @@
             background-color: #f8f8f8;
         }
 
+        .bookmarklet-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .bookmarklet-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .bookmarklet {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #007AFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            word-break: break-all;
+            font-size: 14px;
+        }
+
         .instructions {
             background: white;
             border-radius: 12px;
@@ -170,39 +196,36 @@
             <p>Control webpage scrolling with ease</p>
         </div>
 
-        <div class="controls">
-            <div class="speed-control">
-                <label for="speed">Scroll Speed</label>
-                <input type="range" id="speed" class="speed-slider" min="1" max="10" value="5">
-                <div class="speed-value" id="speedValue">5</div>
-            </div>
-
-            <div class="buttons">
-                <button id="startScroll" class="start-btn">Start Scrolling</button>
-                <button id="stopScroll" class="stop-btn" disabled>Stop Scrolling</button>
-            </div>
-
-            <div class="status" id="status">Ready to scroll</div>
+        <div class="bookmarklet-section">
+            <h2>Quick Start (Recommended)</h2>
+            <p>Drag this button to your bookmarks bar:</p>
+            <a href="javascript:(function(){var speed=5;var scrollInterval;function startScrolling(){if(scrollInterval)return;scrollInterval=setInterval(function(){window.scrollBy({top:speed*5,behavior:'smooth'});if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight){stopScrolling();}},50);}function stopScrolling(){if(scrollInterval){clearInterval(scrollInterval);scrollInterval=null;}}var speed=prompt('Enter scroll speed (1-10):',5);if(speed){speed=parseInt(speed);if(speed>=1&&speed<=10){startScrolling();}else{alert('Please enter a number between 1 and 10');}}});" class="bookmarklet">Auto Scroll</a>
+            <p>To use:</p>
+            <ol>
+                <li>Go to any webpage you want to scroll</li>
+                <li>Tap the "Auto Scroll" bookmark</li>
+                <li>Enter a speed (1-10) when prompted</li>
+                <li>Tap anywhere on the page to stop scrolling</li>
+            </ol>
         </div>
 
         <div class="instructions">
-            <h2>How to Use</h2>
+            <h2>How to Add Bookmarklet on iPhone</h2>
             <ol>
-                <li>Open the webpage you want to scroll</li>
-                <li>Open this web app in a new tab</li>
-                <li>Adjust the speed using the slider</li>
-                <li>Click "Start Scrolling" to begin</li>
-                <li>Click "Stop Scrolling" to stop</li>
-                <li>To add to home screen: 
+                <li>Open Safari and go to this page</li>
+                <li>Tap the share button (square with up arrow)</li>
+                <li>Scroll down and tap "Add Bookmark"</li>
+                <li>Edit the name to "Auto Scroll"</li>
+                <li>Tap "Save"</li>
+                <li>To use on any webpage:
                     <ol>
-                        <li>Tap the share button in Safari</li>
-                        <li>Scroll down and tap "Add to Home Screen"</li>
-                        <li>Tap "Add" to install</li>
+                        <li>Tap the bookmarks button (book icon)</li>
+                        <li>Tap "Auto Scroll"</li>
+                        <li>Enter speed when prompted</li>
                     </ol>
                 </li>
             </ol>
         </div>
     </div>
-    <script src="app.js"></script>
 </body>
 </html> 
