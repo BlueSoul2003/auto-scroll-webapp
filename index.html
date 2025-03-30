@@ -124,32 +124,6 @@
             background-color: #f8f8f8;
         }
 
-        .bookmarklet-section {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-
-        .bookmarklet-section h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .bookmarklet {
-            display: inline-block;
-            padding: 10px 15px;
-            background: #007AFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            word-break: break-all;
-            font-size: 14px;
-        }
-
         .instructions {
             background: white;
             border-radius: 12px;
@@ -196,38 +170,115 @@
             <p>Control webpage scrolling with ease</p>
         </div>
 
-        <div class="bookmarklet-section">
-            <h2>Quick Start (Recommended)</h2>
-            <p>Drag this button to your bookmarks bar:</p>
-            <a href="javascript:(function(){var speed=prompt('Enter scroll speed (1-10):',5);if(speed){speed=parseInt(speed);if(speed>=1&&speed<=10){var scrollInterval=setInterval(function(){window.scrollBy(0,speed);if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight){clearInterval(scrollInterval);}},100);document.addEventListener('click',function(){clearInterval(scrollInterval);},true);}else{alert('Please enter a number between 1 and 10');}}})();" class="bookmarklet">Auto Scroll</a>
-            <p>To use:</p>
-            <ol>
-                <li>Go to any webpage you want to scroll</li>
-                <li>Tap the "Auto Scroll" bookmark</li>
-                <li>Enter a speed (1-10) when prompted</li>
-                <li>Tap anywhere on the page to stop scrolling</li>
-            </ol>
+        <div class="controls">
+            <div class="speed-control">
+                <label for="speed">Scroll Speed</label>
+                <input type="range" id="speed" class="speed-slider" min="1" max="10" value="5">
+                <div class="speed-value" id="speedValue">5</div>
+            </div>
+
+            <div class="buttons">
+                <button id="startScroll" class="start-btn">Start Scrolling</button>
+                <button id="stopScroll" class="stop-btn" disabled>Stop Scrolling</button>
+            </div>
+
+            <div class="status" id="status">Ready to scroll</div>
         </div>
 
         <div class="instructions">
-            <h2>How to Add Bookmarklet on iPhone</h2>
+            <h2>How to Use</h2>
             <ol>
-                <li>Open Safari and go to this page</li>
-                <li>Tap the share button (square with up arrow)</li>
-                <li>Scroll down and tap "Add Bookmark"</li>
-                <li>Edit the name to "Auto Scroll"</li>
-                <li>Tap "Save"</li>
-                <li>To use on any webpage:
+                <li>Open the webpage you want to scroll</li>
+                <li>Open this web app in a new tab</li>
+                <li>Adjust the speed using the slider (1-10)</li>
+                <li>Click "Start Scrolling" to begin</li>
+                <li>Click "Stop Scrolling" to stop</li>
+                <li>To add to home screen: 
                     <ol>
-                        <li>Go to the webpage you want to scroll</li>
-                        <li>Tap the bookmarks button (book icon)</li>
-                        <li>Tap "Auto Scroll"</li>
-                        <li>Enter speed when prompted</li>
-                        <li>Tap anywhere to stop scrolling</li>
+                        <li>Tap the share button in Safari</li>
+                        <li>Scroll down and tap "Add to Home Screen"</li>
+                        <li>Tap "Add" to install</li>
                     </ol>
                 </li>
             </ol>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const speedInput = document.getElementById('speed');
+            const speedValue = document.getElementById('speedValue');
+            const startButton = document.getElementById('startScroll');
+            const stopButton = document.getElementById('stopScroll');
+            const status = document.getElementById('status');
+            
+            let scrollInterval = null;
+            let isScrolling = false;
+
+            // Update speed value display
+            speedInput.addEventListener('input', function() {
+                speedValue.textContent = this.value;
+            });
+
+            function startScrolling(speed) {
+                if (scrollInterval) return;
+                
+                scrollInterval = setInterval(() => {
+                    window.scrollBy({
+                        top: speed,
+                        behavior: 'smooth'
+                    });
+
+                    // Stop scrolling if we've reached the bottom of the page
+                    if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight) {
+                        stopScrolling();
+                    }
+                }, 50);
+            }
+
+            function stopScrolling() {
+                if (scrollInterval) {
+                    clearInterval(scrollInterval);
+                    scrollInterval = null;
+                }
+            }
+
+            // Start scrolling
+            startButton.addEventListener('click', function() {
+                const speed = parseInt(speedInput.value);
+                startScrolling(speed);
+                isScrolling = true;
+                
+                startButton.disabled = true;
+                stopButton.disabled = false;
+                status.textContent = 'Scrolling...';
+            });
+
+            // Stop scrolling
+            stopButton.addEventListener('click', function() {
+                stopScrolling();
+                isScrolling = false;
+                
+                startButton.disabled = false;
+                stopButton.disabled = true;
+                status.textContent = 'Stopped';
+            });
+
+            // Handle visibility change
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden && isScrolling) {
+                    stopScrolling();
+                    isScrolling = false;
+                    startButton.disabled = false;
+                    stopButton.disabled = true;
+                    status.textContent = 'Stopped (tab inactive)';
+                }
+            });
+
+            // Handle page unload
+            window.addEventListener('beforeunload', function() {
+                stopScrolling();
+            });
+        });
+    </script>
 </body>
 </html> 
