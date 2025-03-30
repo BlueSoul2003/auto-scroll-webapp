@@ -199,7 +199,7 @@
         <div class="bookmarklet-section">
             <h2>Quick Start (Recommended)</h2>
             <p>Drag this button to your bookmarks bar:</p>
-            <a href="javascript:(function(){var speed=5;var scrollInterval;function startScrolling(){if(scrollInterval)return;scrollInterval=setInterval(function(){window.scrollBy({top:speed*5,behavior:'smooth'});if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight){stopScrolling();}},50);}function stopScrolling(){if(scrollInterval){clearInterval(scrollInterval);scrollInterval=null;}}var speed=prompt('Enter scroll speed (1-10):',5);if(speed){speed=parseInt(speed);if(speed>=1&&speed<=10){startScrolling();}else{alert('Please enter a number between 1 and 10');}}});" class="bookmarklet">Auto Scroll</a>
+            <a href="javascript:(function(){var speed=prompt('Enter scroll speed (1-10):',5);if(speed){speed=parseInt(speed);if(speed>=1&&speed<=10){var scrollInterval=setInterval(function(){window.scrollBy(0,speed);if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight){clearInterval(scrollInterval);}},100);document.addEventListener('click',function(){clearInterval(scrollInterval);},true);}else{alert('Please enter a number between 1 and 10');}}})();" class="bookmarklet">Auto Scroll</a>
             <p>To use:</p>
             <ol>
                 <li>Go to any webpage you want to scroll</li>
